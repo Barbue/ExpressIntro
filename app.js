@@ -21,6 +21,30 @@ const express = require('express')
 
     app.get('/', (req, res) => {
       res.send('Hello World!')
+      
+    })
+
+    app.get('/all-movies', (req, res) => {
+        res.json({favoriteMovieList})
+        
+        
+      })
+
+    app.get('/single-movie/:titleToFind', (req, res) => {
+        console.log(req.params)
+        const movieFound = favoriteMovieList.find((movie) => {
+            return movie.titleToFind = req.params.titleToFind
+        })
+        res.json({
+            success: true,
+            movieFound: movieFound
+    })
+    })
+
+    app.get('/new-movie', (req, res) => {
+        console.log(req.params)
+        
+        
     })
 
     app.listen(port, () => {
