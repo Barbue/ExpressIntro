@@ -43,7 +43,9 @@ const express = require('express')
 
     app.get('/new-movie', (req, res) => {
         console.log(req.params)
-        
+        {
+            
+        }
         
     })
 
