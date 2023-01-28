@@ -64,24 +64,26 @@ const express = require('express')
     })
 
 
-    app.put('/update-movie/:titleToUpdate',(req, res) => {
+    app.put('/update-movie/:title',(req, res) => {
       const titleToUpdate = req.params.title
       
-      const originalMovieIndex = favoriteMovieList.findIndex((movie)=> {
+      const originalMovie = favoriteMovieList.find((movie)=> {
         return movie.title === titleToUpdate
       })
 
-      const originalMovie = originalMovieIndex
-
+      const originalMovieIndex = favoriteMovieList.findIndex((movie)=> {
+        return movie.title === titleToUpdate
+      })
+      //const originalMovie = originalMovieIndex
       const updatedMovie = {}
 
       if (req.body.title !== undefined) {
         updatedMovie.title = req.body.title
       } else {updatedMovie.title = originalMovie.title}
 
-      // if (req.body.starRating !== undefined) {
-      //   updatedMovie.starRating = req.body.starRating
-      // } else {updatedMovie.starRating = originalMovie.starRating}
+      if (req.body.starRating !== undefined) {
+        updatedMovie.starRating = req.body.starRating
+      } else {updatedMovie.starRating = originalMovie.starRating}
 
       if (req.body.isRecommended !== undefined) {
         updatedMovie.isRecommended = req.body.isRecommended
@@ -97,6 +99,23 @@ const express = require('express')
 
       res.json({
         success: true,
+      })
+      })
+
+
+      app.delete('/delete-movie/:title', (req, res) => {
+       
+        const titleToDelete = req.params.title
+
+       const deleteMovieIndex = favoriteMovieList.findIndex((movie) => {
+        return movie.title === titleToDelete
+      })
+
+      favoriteMovieList.splice(deleteMovieIndex,1)
+
+
+      res.json({
+          success: true,
       })
       })
 
