@@ -25,9 +25,15 @@ const express = require('express')
     })
 
     app.get('/all-movies', (req, res) => {
-        res.json({favoriteMovieList})
-        
-        
+
+        const starRating = Number(req.query.starRating)
+
+        const filteredMovies = favoriteMovieList.filter((movie) => {
+          return movie.starRating < starRating 
+        })
+        res.json({
+          success: true,
+          favoriteMovieList: filteredMovies })
       })
 
     app.get('/single-movie/:titleToFind', (req, res) => {
@@ -49,8 +55,30 @@ const express = require('express')
     })
 
     app.post('/new-movie', (req, res) => {
+
+      if (req.body.title === undefined || typeof(req.body.title) !== "string") {
+        res.json({
+          success: false,
+          message: "A title is required and it must be a string"
+        })
+        return   
+      }
+      if (req.body.starRating === undefined || req.body.starRating < 0 || req.body.starRating >= 5 ){
+        res.json({
+          success: false,
+          message: "A starRating is required and must be greater than 0 and less than 5"
+        })
+        return
+      }
+      if (req.body.isRecommended === undefined || typeof(req.body.isRecommended) !== "boolean"){
+        res.json({
+          success: false,
+          message: "An isRecommended is required and must be a boolean"
+        })
+        return
+      }
        const newMovie = {}
-        newMovie.title = req.body.title,
+       newMovie.title = req.body.title,
         newMovie.starRating = req.body.starRating,
         newMovie.isRecommended = req.body.isRecommended,
         newMovie.createdAt = new Date(),
