@@ -33,13 +33,13 @@ const express = require('express')
     app.get('/single-movie/:titleToFind', (req, res) => {
         console.log(req.params)
         const foundMovie = favoriteMovieList.find((movie) => {
-            //return movie.titleToFind = req.params.titleToFind
+            return movie.titleToFind = req.params.titleToFind
 
-            if (movie.title === titleToFind) {
-              return true
-            } else {
-              return false
-            }
+            // if (movie.title === titleToFind) {
+            //   return true
+            // } else {
+            //   return false
+            // }
         })
         res.json({
             success: true,
@@ -64,13 +64,41 @@ const express = require('express')
     })
 
 
-    app.put('/update-movie',(req, res) => {
+    app.put('/update-movie/:titleToUpdate',(req, res) => {
+      const titleToUpdate = req.params.title
+      
+      const originalMovieIndex = favoriteMovieList.findIndex((movie)=> {
+        return movie.title === titleToUpdate
+      })
 
+      const originalMovie = originalMovieIndex
 
+      const updatedMovie = {}
 
+      if (req.body.title !== undefined) {
+        updatedMovie.title = req.body.title
+      } else {updatedMovie.title = originalMovie.title}
 
+      // if (req.body.starRating !== undefined) {
+      //   updatedMovie.starRating = req.body.starRating
+      // } else {updatedMovie.starRating = originalMovie.starRating}
 
-    })
+      if (req.body.isRecommended !== undefined) {
+        updatedMovie.isRecommended = req.body.isRecommended
+      } else {updatedMovie.isRecommended = originalMovie.isRecommended}
+
+      updatedMovie.createdAt = originalMovie.createdAt
+      updatedMovie.lastModified = new Date()
+
+      console.log(originalMovieIndex)
+
+      favoriteMovieList[originalMovieIndex] = updatedMovie
+      console.log(updatedMovie)
+
+      res.json({
+        success: true,
+      })
+      })
 
     app.listen(port, () => {
       console.log(`Example app listening on port ${port}`)
