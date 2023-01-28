@@ -32,21 +32,44 @@ const express = require('express')
 
     app.get('/single-movie/:titleToFind', (req, res) => {
         console.log(req.params)
-        const movieFound = favoriteMovieList.find((movie) => {
-            return movie.titleToFind = req.params.titleToFind
+        const foundMovie = favoriteMovieList.find((movie) => {
+            //return movie.titleToFind = req.params.titleToFind
+
+            if (movie.title === titleToFind) {
+              return true
+            } else {
+              return false
+            }
         })
         res.json({
             success: true,
-            movieFound: movieFound
+            foundMovie: foundMovie
+
     })
     })
 
-    app.get('/new-movie', (req, res) => {
-        console.log(req.params)
-        {
-            
-        }
-        
+    app.post('/new-movie', (req, res) => {
+       const newMovie = {}
+        newMovie.title = req.body.title,
+        newMovie.starRating = req.body.starRating,
+        newMovie.isRecommended = req.body.isRecommended,
+        newMovie.createdAt = new Date(),
+        newMovie.lastModified = new Date()
+    console.log(newMovie)
+    favoriteMovieList.push(newMovie)
+
+    res.json({
+      success: true,
+    })
+    })
+
+
+    app.put('/update-movie',(req, res) => {
+
+
+
+
+
     })
 
     app.listen(port, () => {
